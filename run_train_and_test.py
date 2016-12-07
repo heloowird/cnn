@@ -62,10 +62,10 @@ def train_cnn(step_num, step):
 		print "%d batch cost time:  %d ms" % (i, int((time.time() - start_t)*1000))
 
 		# print accuracy of every one epoch
-		if False and i % display_step == 0 or (i+1) == step_num:
+		if i % display_step == 0 or (i+1) == step_num:
 			print "accuracy of %d step (%d epoch): %f" % ((i+1), (i+1)/840, cnn_net.accuracy(valid_features.reshape((-1, 1, 28, 28)), valid_labels))
 
-		if False and i % (display_step * 10) == 0 and i:
+		if i % (display_step * 10) == 0 and i:
 			display_step *= 10
 
 	# test
@@ -76,4 +76,4 @@ def train_cnn(step_num, step):
 	#np.savetxt('submission.csv', predict_label, fmt='%i,%i', header='ImageId,Label', comments='')
 
 if __name__ == "__main__":
-	train_cnn(1, 1e-5)
+	train_cnn(1000, 1e-4)
