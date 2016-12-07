@@ -9,6 +9,7 @@ class relu(layer):
 		self.forword_output = None
 		self.backward_output = None
 		self.negative_slope = negative_slope
+		self.need_update = False
 
 	# forward
 	def forward(self, input):

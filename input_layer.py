@@ -7,6 +7,7 @@ class input2d(layer):
 		self.name = name
 		self.forword_output = None
 		self.backward_output = None	
+		self.need_update = False
 	
 	# forward
 	def forward(self, input):

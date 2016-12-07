@@ -7,3 +7,5 @@ class layer:
 		pass
 	def backward(self):
 		pass
+	def update(self):
+		pass

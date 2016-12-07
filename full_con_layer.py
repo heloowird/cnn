@@ -19,6 +19,7 @@ class full1d:
 		self.bias = self.init_bias(output_dim)
 		self.need_reshape = False
 		self.input_shape = None
+		self.need_update = True
 	
 	def init_weight(self, input_dim, output_dim):
 		return (np.random.rand(input_dim, output_dim) - 0.5) / 10.0	

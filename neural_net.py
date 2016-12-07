@@ -31,7 +31,7 @@ class cnn:
 				conv1_kernel_shape, \
 				conv1_pad_shape, \
 				conv1_stride_shape)
-		conv1_active = relu_layer.relu("conv1_active")
+		conv1_active = relu_layer.relu("conv1_active", 0.1)
 		self.layers.append(conv1)
 		self.layers.append(conv1_active)
 
@@ -55,7 +55,7 @@ class cnn:
 				conv2_kernel_shape, \
 				conv2_pad_shape, \
 				conv2_stride_shape)
-		conv2_active = relu_layer.relu("conv2_active")
+		conv2_active = relu_layer.relu("conv2_active", 0.1)
 		self.layers.append(conv2)
 		self.layers.append(conv2_active)
 
@@ -77,7 +77,7 @@ class cnn:
 		input_ = input
 		for i in range(self.layer_num):
 			self.layers[i].forward(input_)
-			print self.layers[i].name, self.layers[i].forward_output
+			#print self.layers[i].name, self.layers[i].forward_output
 			input_ = self.layers[i].forward_output
 
 	def cal_output_diff(self, label):

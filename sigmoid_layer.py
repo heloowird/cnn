@@ -8,6 +8,7 @@ class sigmoid(layer):
 		self.name = name
 		self.forward_output = None
 		self.backward_output = None
+		self.need_update = False
 
 	# forward
 	def forward(self, input):

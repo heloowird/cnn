@@ -17,6 +17,7 @@ class mean2d(layer):
 		self.kernel_shape = kernel_shape
 		self.pad_shape = pad_shape
 		self.stride_shape = stride_shape
+		self.need_update = False
 
 	def forward(self, input):
 		self.forward_input = input

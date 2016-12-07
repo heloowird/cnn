@@ -18,17 +18,18 @@ class conv2d(layer):
 		self.name = name
 		self.output_ch = output_chanel
 		self.input_ch = input_chanel
-		self.kernel = self.init_weight(kernel_shape)
+		self.weight = self.init_weight(kernel_shape)
 		self.bias = self.init_bias(output_chanel)
 		self.kernel_shape = kernel_shape
 		self.pad_shape = pad_shape
 		self.stride_shape = stride_shape
+		self.need_update = True
 	
 	def init_weight(self, kernel_shape):
-		return (np.random.rand(self.output_ch, \
+		return np.random.standard_normal((self.output_ch, \
 				self.input_ch, \
 				kernel_shape[0], \
-				kernel_shape[1]) - 0.5) / 10.0	
+				kernel_shape[1])) * .1
 
 	def init_bias(self, output_chanel):
 		return np.zeros(output_chanel)
@@ -37,7 +38,7 @@ class conv2d(layer):
 		self.forward_input = input
 
 		batch_sz, input_ch, input_h, input_w = input.shape
-		output_ch, _, kernel_h, kernel_w = self.kernel.shape
+		output_ch, _, kernel_h, kernel_w = self.weight.shape
 		pad_h, pad_w = self.pad_shape
 		stride_h, stride_w = self.stride_shape
 
@@ -62,7 +63,7 @@ class conv2d(layer):
 					for o_w in range(output_w):
 						sum_ = 0.0
 						for i_c in range(input_ch):
-							cur_kernel = self.kernel[o_c, i_c]
+							cur_kernel = self.weight[o_c, i_c]
 							start_h = o_h * stride_h
 							start_w = o_w * stride_w
 							end_h = start_h + kernel_h
@@ -74,7 +75,7 @@ class conv2d(layer):
 		self.backward_input = diff
 
 		batch_sz, diff_ch, diff_h, diff_w = diff.shape
-		_, input_ch, kernel_h, kernel_w = self.kernel.shape
+		_, input_ch, kernel_h, kernel_w = self.weight.shape
 		pad_h, pad_w = self.pad_shape
 		pad_h += kernel_h - 1
 		pad_w += kernel_w - 1
@@ -103,7 +104,7 @@ class conv2d(layer):
 					for o_w in range(output_w):
 						sum_ = 0.0
 						for d_c in range(diff_ch):
-							cur_kernel = np.rot90(self.kernel[d_c, o_c])
+							cur_kernel = np.rot90(self.weight[d_c, o_c])
 							start_h = o_h * stride_h
 							start_w = o_w * stride_w
 							end_h = start_h + kernel_h
@@ -113,7 +114,7 @@ class conv2d(layer):
 
 	def update(self, step):
 		batch_sz = self.forward_input.shape[0]
-		delta_kernel = np.zeros_like(self.kernel)
+		delta_kernel = np.zeros_like(self.weight)
 		for c in range(batch_sz):
 			for i in range(self.output_ch):
 				for j in range(self.input_ch):
@@ -126,10 +127,10 @@ class conv2d(layer):
 							end_h = start_h + kernel_.shape[0]
 							end_w = start_w + kernel_.shape[1]
 							delta_kernel[i, j, k_h, k_w] +=  np.sum(conv_[start_h : end_h, start_w : end_w] * kernel_)
-		self.kernel -= step * delta_kernel / batch_sz
+		self.weight -= step * delta_kernel / batch_sz
 
 		delta_bias = np.zeros_like(self.bias)
 		for c in range(batch_sz):
 			for i in range(self.output_ch):
-				delta_bias += np.sum(self.backward_input[i])
+				delta_bias[i] += np.sum(self.backward_input[c, i])
 		self.bias -= step * delta_bias / batch_sz
