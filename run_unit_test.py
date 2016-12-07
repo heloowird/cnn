@@ -6,13 +6,13 @@ import time
 import numpy as np
 import pandas as pd
 
-import neural_net_test
+import neural_net_unit_test
 
 np.set_printoptions(threshold='nan') 
 
 def train_cnn(step):
 	# initialize simple cnn
-	cnn_net = neural_net_test.cnn()
+	cnn_net = neural_net_unit_test.cnn()
 
 	features_data = np.arange(36).reshape(1, 1, 6, 6).astype("float")
 
