@@ -2,16 +2,14 @@
 
 import numpy as np
 
-import input_layer
-import conv_layer
-import max_pool_layer
-import mean_pool_layer
-import full_con_layer
-import sigmoid_layer
-import tanh_layer
-import relu_layer
-
-import util
+from layer import input_layer
+from layer import conv_layer
+from layer import max_pool_layer
+from layer import mean_pool_layer
+from layer import full_con_layer
+from layer import sigmoid_layer
+from layer import tanh_layer
+from layer import relu_layer
 
 class cnn:
 	def __init__(self):
